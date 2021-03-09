@@ -1,0 +1,94 @@
+openapi: 3.0.0
+info:
+  title: Users API
+  description: Management of Users
+  version: 1.0.0
+servers:
+  - url: 'http://api.users.gonzalofh.com/v1'
+    description: 'Main (production) server'
+  - url: 'http://staging-api.users.gonzalofh.com'
+    description: 'Internal staging server for testing'
+paths:
+  '/users/':
+    post:
+      operationId: createUser
+      summary: Returns User by identifier
+      responses:
+        '201':
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserIdDto'
+        '400':
+          description: Bad request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateCommand'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserCreateCommand'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreateCommand'
+  '/users/{id}':
+    get:
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          description: 'The unique identifier of the User'
+          required: true
+          schema:
+            type: string
+      summary: Returns User by identifier
+      responses:
+        '200':
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not found
+components:
+  schemas:
+    User:
+      properties:
+        id:
+          type: string
+          example: "604572ade483870422ea8fb2"
+        firstName:
+          type: string
+          example: Gonzalo
+        lastName:
+          type: string
+          example: Fernández
+        dateOfBirth:
+          type: string
+          example: "04-20-1988"
+      type: object
+    UserIdDto:
+      properties:
+        id:
+          type: string
+          example: "604572ade483870422ea8fb2"
+      type: object
+    UserCreateCommand:
+      required: [ 'firstName', 'lastName', 'dateOfBirth' ]
+      properties:
+        id:
+          type: string
+          example: "604572ade483870422ea8fb2"
+        firstName:
+          type: string
+          example: Gonzalo
+        lastName:
+          type: string
+          example: Fernández
+        dateOfBirth:
+          type: string
+          example: "04-20-1988"
+      type: object
